@@ -1,5 +1,5 @@
 #include "systemc.h"
 
-SC_MODULE(Somador4){
+SC_MODULE(Somador){
     
 }

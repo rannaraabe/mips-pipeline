@@ -5,14 +5,21 @@
 // TODO: importar os componentes que foram implementados
 
 /*** Constantes que serão utilizadas ***/
-#define TAM_INSTRUCAO 32    // Tamanho de instrucao
-#define TAM_PALAVRA 32 	    // Tamanho da palavra de dado FIXME:
-#define OPCODE 5		    // Tamanho da palavra de opcode
-#define ULA_CODE 3 		    // Tamanho da palavra de ULA opcode
-#define ENDEREC_REG 5 	    // Tamanho da palavra de endereçamento
-#define TAM_BANCO_REG 32 	// Quantidade de registradores (2^(ENDEREC_REG))
-#define TAM_PALAVRA_ENDEREC 7 	    // Tamanho da palavra de endereçamento
-#define TAM_MEM_INST 128 	    // Quantidade de blocos de memoria (2^(ENDEREC_MEM))
+#define INST_SIZE 32            // Tamanho da palavra de instrucao
+#define WORD_SIZE 32 	        // Tamanho da palavra de dados
+
+#define OPCODE 5		        // Tamanho da papalvra do opcode
+#define RS 9                    // Tamanho do primeiro operando
+#define RT 9                    // Tamanho do segundo operando
+#define RD 9                    // Tamanho do operando de saída
+
+#define ALU_CODE 3 		        // Tamanho da palavra do opcode que chega na ULA
+
+#define REG_SIZE 9 	            // Tamanho dos registradores
+#define REG_BANK_SIZE 512 	    // Quantidade de registradores (tamanho do banco de registradores) (2^(REG_SIZE))
+
+#define WORD_ADDRESSING_SIZE 9 	// Tamanho da palavra endereçamento da memória de dados e de instrução
+#define MEM_SIZE 512 	        // Quantidade de blocos de memoria (2^(WORD_ADDRESSING_SIZE))
 
 int sc_main(int argc, char* argv[]) {
     /*** Declaração dos componentes que serão utilizados ***/
@@ -28,7 +35,7 @@ int sc_main(int argc, char* argv[]) {
     Controle controle("Controle");
 	// Banco de registradores
 	BancoRegistradores bancoReg("BancoRegistradores");
-	// Unidade Logica Aritmetica
+	// Unidade Logico Aritmetica
 	ULA ula("ULA");
 	// Memoria de dados
 	MemoriaDados memoriaDados("MemoriaDados");
@@ -42,8 +49,8 @@ int sc_main(int argc, char* argv[]) {
     // Extensor de 16 bits para 32 bits
     Ext ext("Ext");
     // Somador
-    Somador4 somador1("Somador1");
-    Somador32 somador2("Somador2");
+    Somador somador1("Somador1");
+    Somador somador2("Somador2");
     // Branch
     And portaAnd("AND");
 
