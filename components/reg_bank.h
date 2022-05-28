@@ -11,13 +11,13 @@ SC_MODULE(reg_bank){
 
     sc_in<sc_uint<9>> rs, rt, rd;
     sc_out<32> op_1, op_2;   
-    sc_in<32> write_back;
+    sc_in<32> write_reg;
 
     // *** Methods ***
     void operate() {
         if(enable.read()){
             if(wr.read()){
-                bank[rd.read()] = write_back.read();
+                bank[rd.read()] = write_reg.read();
             } else {
                 op_1.write(bank[rs.read()]);
                 op_2.write(bank[rt.read()]);
