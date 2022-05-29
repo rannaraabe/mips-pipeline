@@ -7,7 +7,7 @@ SC_MODULE(inst_memory){
 	sc_in<bool> clock;
 	sc_in<bool> enable;
 	sc_in<bool> wr;
-    sc_in<sc_uint<9>> address;
+    sc_in<sc_int<9>> address;
     sc_in<sc_int<32>> inst_pc;
 	sc_out<sc_int<32>> inst;
 

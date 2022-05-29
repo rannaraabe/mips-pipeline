@@ -8,13 +8,13 @@ using namespace std;
 
 SC_MODULE(decoder){
     // *** Signals ***
-    sc_in<sc_uint<32>> inst;
-    sc_out<sc_uint<9>> rs, rt, rd;
-    sc_out<sc_uint<5>> op;
+    sc_in<sc_int<32>> inst;
+    sc_out<sc_int<9>> rs, rt, rd;
+    sc_out<sc_int<5>> op;
 
     // *** Methods ***
     void operate() {
-        sc_uint<32> decode_inst = inst.read();
+        sc_int<32> decode_inst = inst.read();
         cout << "> Decoder: Processing... " << inst << endl;
         
         rd.write(decode_inst.range(8,0));

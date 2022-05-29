@@ -7,11 +7,11 @@ SC_MODULE(pc){
     sc_in<bool> enable;
     sc_in<bool> load;
     sc_in<bool> reset;
-    sc_in<sc_uint<9>> next_inst;
-    sc_out<sc_uint<9>> pc_out;
+    sc_in<sc_int<9>> next_inst;
+    sc_out<sc_int<9>> pc_out;
 
     // *** Methods ***
-    sc_uint<9> counter = 0;
+    sc_int<9> counter = 0;
     void operate() {
         if(enable.read()){
             counter++;

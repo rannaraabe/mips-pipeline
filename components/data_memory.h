@@ -12,7 +12,7 @@ SC_MODULE(data_memory){
     sc_in<bool> enable;
     sc_in<bool> wr;
 
-    sc_in<sc_uint<9>> address;
+    sc_in<sc_int<9>> address;
     sc_in<sc_int<32>> rs;
     sc_out<sc_int<32>> mem_out;
 

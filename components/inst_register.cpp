@@ -6,8 +6,8 @@ SC_MODULE(inst_register){
     sc_in_clk clock;
 	sc_in<bool> enable;
 	sc_in<bool> wr;
-	sc_in<sc_uint<32>> inst_in;
-	sc_out<sc_uint<32>> inst_out;
+	sc_in<sc_int<32>> inst_in;
+	sc_out<sc_int<32>> inst_out;
 
     // *** Methods ***
     void operate() {
@@ -22,7 +22,7 @@ SC_MODULE(inst_register){
 	}
 
     // *** Constructor ***
-    sc_uint<32> instruction;
+    sc_int<32> instruction;
     SC_HAS_PROCESS(inst_register);
 	inst_register(sc_module_name smn) : sc_module { smn } {
         cout << ">> Instruction Register" << endl;

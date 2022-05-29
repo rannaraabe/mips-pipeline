@@ -3,10 +3,10 @@ using namespace std;
 
 SC_MODULE(mux_read){
     // *** Signals ***
-    sc_in<sc_uint<2>> selector;
+    sc_in<sc_int<2>> selector;
     sc_in<sc_int<32>> mem_out;
     sc_in<sc_int<32>> alu_out;
-    sc_in<sc_uint<9>> rs;
+    sc_in<sc_int<9>> rs;
     sc_out<sc_int<32>> write_reg;
 
     // *** Methods ***

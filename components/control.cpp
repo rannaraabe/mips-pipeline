@@ -4,26 +4,26 @@ using namespace std;
 SC_MODULE(control){
     // *** Signals ***
     sc_in_clk clock;
-    sc_in<sc_uint<5>> op;
+    sc_in<sc_int<5>> op;
     sc_in<bool> neg;
     sc_in<bool> zero;
-    sc_in<sc_uint<9>> rs;	
-    sc_in<sc_uint<9>> rt;
-    sc_in<sc_uint<9>> rd;	
+    sc_in<sc_int<9>> rs;	
+    sc_in<sc_int<9>> rt;
+    sc_in<sc_int<9>> rd;	
 
     // PC
     sc_out<bool> enable_pc;
     sc_out<bool> load_pc;
     sc_out<bool> reset_pc;
-    sc_out<sc_uint<9>> jump_pc;
+    sc_out<sc_int<9>> jump_pc;
     // Instruction Memory
     sc_out<bool> enable_instr_memory;
     sc_out<bool> wr_instr_memory;
     // Instruction register
     sc_out<bool> enable_ir;
     sc_out<bool> wr_ir;
-    sc_out<sc_uint<9>> immed_r;
-    sc_out<sc_uint<9>> immed_rd;
+    sc_out<sc_int<9>> immed_r;
+    sc_out<sc_int<9>> immed_rd;
     // Register bank
     sc_out<bool> enable_reg_bank;
     sc_out<bool> wr_reg_bank;
@@ -34,8 +34,8 @@ SC_MODULE(control){
     // ALU
     sc_out<bool> reset_z_n;
     // Multiplexers
-    sc_out<sc_uint<2>> mux_read;
-    sc_out<sc_uint<2>> mux_write;
+    sc_out<sc_int<2>> mux_read;
+    sc_out<sc_int<2>> mux_write;
     // Data memory 
     sc_out<bool> enable_data_mem;
     sc_out<bool> wr_data_mem;

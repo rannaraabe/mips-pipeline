@@ -6,13 +6,13 @@ using namespace std;
 
 SC_MODULE(alu){
     // *** Signals ***
-    sc_in<sc_uint<32>> rs, rt;
-    sc_in<sc_uint<5>> alu_op;
-    sc_out<sc_uint<32>> alu_out; 
+    sc_in<sc_int<32>> rs, rt;
+    sc_in<sc_int<5>> alu_op;
+    sc_out<sc_int<32>> alu_out; 
     sc_out<bool> zero, neg;
     sc_in<bool> reset_z_n; 
 
-    sc_uint<32> result;
+    sc_int<32> result;
 
     // *** Methods ***
     void operate() {

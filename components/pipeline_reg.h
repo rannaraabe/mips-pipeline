@@ -10,15 +10,15 @@ SC_MODULE(pipeline_reg) {
 	sc_in<bool> enable;
 	sc_in<bool> wr;
 
-	sc_in<sc_uint<5>> op_in;
-	sc_in<sc_uint<9>> rs_in;
-	sc_in<sc_uint<9>> rt_in;	
-	sc_in<sc_uint<9>> rd_in;
+	sc_in<sc_int<5>> op_in;
+	sc_in<sc_int<9>> rs_in;
+	sc_in<sc_int<9>> rt_in;	
+	sc_in<sc_int<9>> rd_in;
 
-	sc_out<sc_uint<5>> op_out;	
-	sc_out<sc_uint<9>> rs_out;
-	sc_out<sc_uint<9>> rt_out;
-	sc_out<sc_uint<9>> rd_out;	
+	sc_out<sc_int<5>> op_out;	
+	sc_out<sc_int<9>> rs_out;
+	sc_out<sc_int<9>> rt_out;
+	sc_out<sc_int<9>> rd_out;	
 
     // *** Methods ***
     void operate() {

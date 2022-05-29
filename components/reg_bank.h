@@ -10,7 +10,7 @@ SC_MODULE(reg_bank){
     sc_in<bool> enable;
     sc_in<bool> wr;
 
-    sc_in<sc_uint<9>> rs, rt, rd;
+    sc_in<sc_int<9>> rs, rt, rd;
     sc_out<sc_int<32>> op_1, op_2;   
     sc_in<sc_int<32>> write_reg;
 
