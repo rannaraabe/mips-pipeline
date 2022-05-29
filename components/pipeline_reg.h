@@ -3,7 +3,7 @@
 
 #include "systemc.h"
 
-SC_MODULE(pipeline) {
+SC_MODULE(pipeline_reg) {
     // *** Signals ***
     sc_in_clk clock;
 	sc_in<bool> enable;
@@ -46,9 +46,9 @@ SC_MODULE(pipeline) {
 	}
 
     // *** Constructor ***
-    SC_HAS_PROCESS(pipeline);
+    SC_HAS_PROCESS(pipeline_reg);
 	pipeline(sc_module_name smn) : sc_module { smn } {
-        cout << ">> Pipeline" << endl;
+        cout << ">> Pipeline Register" << endl;
         SC_METHOD(operate);
         sensitive << clock.pos();
     };

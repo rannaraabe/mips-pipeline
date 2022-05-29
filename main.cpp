@@ -6,9 +6,9 @@ int sc_main(int argc, char* argv[]) {
     
 	cout << ">> Initializing processor..." << endl;
 	sleep(1);
-	processor cara("processor", argc[1]);
+	processor mips_pipe("processor", argc[1]);
 	sc_signal<bool> clock;
-	cara.clock(clock);
+	mips_pipe.clock(clock);
 	int cycles = 0;
 
 	while(not sc_end_of_simulation_invoked()) {
@@ -23,9 +23,9 @@ int sc_main(int argc, char* argv[]) {
 
     cout << ">> Final state: "
 	cout << "> Registers:" << endl;
-	cara.REGISTERS.print(10);
+	mips_pipe.REGISTERS.print(10);
 
 	cout << "> Memory:" << endl;
-	cara.DM.print(10);
+	mips_pipe.DM.print(10);
     return 0;
 }

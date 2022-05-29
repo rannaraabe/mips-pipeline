@@ -23,7 +23,7 @@ SC_MODULE(control){
     sc_out<bool> wr_ir;
     sc_out<sc_uint<9>> immed_r;
     sc_out<sc_uint<9>> immed_rd;
-    // Registes bank
+    // Register bank
     sc_out<bool> enable_reg_bank;
     sc_out<bool> wr_reg_bank;
     // Pipeline
