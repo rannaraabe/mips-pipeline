@@ -1,4 +1,5 @@
 #include "systemc.h"
+using namespace std;
 
 SC_MODULE(control){
     // *** Signals ***
@@ -14,7 +15,7 @@ SC_MODULE(control){
     sc_out<bool> enable_pc;
     sc_out<bool> load_pc;
     sc_out<bool> reset_pc;
-    sc_out<sc_unit<9>> jump_pc;
+    sc_out<sc_uint<9>> jump_pc;
     // Instruction Memory
     sc_out<bool> enable_instr_memory;
     sc_out<bool> wr_instr_memory;
@@ -119,7 +120,7 @@ SC_MODULE(control){
                         mux_read.write(1);
                         mux_write.write(1);
                         enable_reg_bank.write(1);
-                        wr_ref_bank.write(1);
+                        wr_reg_bank.write(1);
                         enable_data_mem.write(1);
                         wr_data_mem.write(0);
                         curr_state = 9;
@@ -132,7 +133,7 @@ SC_MODULE(control){
                         curr_state = 6;
                     }
                     // J operation
-                    else if(op.read == 10) {
+                    else if(op.read() == 10) {
                         enable_pc.write(0);
                         load_pc.write(1);
                         jump_pc.write(rd);
@@ -151,7 +152,7 @@ SC_MODULE(control){
                         curr_state = 7;
                     }
                     //JZ operation
-                    else if(op.read == 12) {
+                    else if(op.read() == 12) {
                         if(zero.read()) {
                             jump_pc.write(rd);
                             enable_pc.write(0);

@@ -1,8 +1,9 @@
 #include "systemc.h"
 #include "processor.cpp"
 #include <bits/stdc++.h>
+using namespace std;
 
-int sc_main(int argc, char* argv[]) {
+int sc_main(int argn, char* argc[]) {
     
 	cout << ">> Initializing processor..." << endl;
 	sleep(1);
@@ -21,11 +22,11 @@ int sc_main(int argc, char* argv[]) {
 	
 	cout << "\n>> Finished after " << cycles - 4 << " cycles." << endl;	
 
-    cout << ">> Final state: "
+    cout << ">> Final state: " << endl;
 	cout << "> Registers:" << endl;
-	mips_pipe.REGISTERS.print(10);
+	// mips_pipe.REG_BANK.print(10);
 
 	cout << "> Memory:" << endl;
-	mips_pipe.DM.print(10);
+	// mips_pipe.DATA_MEMORY.print(10);
     return 0;
 }

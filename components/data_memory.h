@@ -2,7 +2,9 @@
 #define DATA_MEMORY
 
 #include "systemc.h"
-#include <vector>
+#include <bits/stdc++.h>
+
+using namespace std;
 
 SC_MODULE(data_memory){
     // *** Signals ***
@@ -11,8 +13,8 @@ SC_MODULE(data_memory){
     sc_in<bool> wr;
 
     sc_in<sc_uint<9>> address;
-    sc_in<32> rs;
-    sc_out<32> mem_out;
+    sc_in<sc_int<32>> rs;
+    sc_out<sc_int<32>> mem_out;
 
     // *** Methods ***
     void operate() {
@@ -28,7 +30,7 @@ SC_MODULE(data_memory){
         }
     }
 
-    void update_memory(const vector<32> &d){
+    void update_memory(const vector<sc_int<32>> &d){
         for(int i=0; i<d.size(); i++){
             mem_data[i] = d[i];
         }
@@ -41,11 +43,11 @@ SC_MODULE(data_memory){
         SC_METHOD(operate);
         sensitive << clock.pos();
 
-        mem_data = new sc_signal<32>[512];
+        mem_data = new sc_signal<sc_int<32>>[512];
     }
 
     private: 
-        sc_signal<32> *mem_data; 
+        sc_signal<sc_int<32>> *mem_data; 
 };
 
 #endif

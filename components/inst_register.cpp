@@ -1,4 +1,5 @@
 #include "systemc.h"
+using namespace std;
 
 SC_MODULE(inst_register){
     // *** Signals ***
@@ -21,7 +22,7 @@ SC_MODULE(inst_register){
 	}
 
     // *** Constructor ***
-    c_uint<32> instruction;
+    sc_uint<32> instruction;
     SC_HAS_PROCESS(inst_register);
 	inst_register(sc_module_name smn) : sc_module { smn } {
         cout << ">> Instruction Register" << endl;

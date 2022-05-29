@@ -2,6 +2,7 @@
 #define PIPELINE
 
 #include "systemc.h"
+using namespace std;
 
 SC_MODULE(pipeline_reg) {
     // *** Signals ***
@@ -47,7 +48,7 @@ SC_MODULE(pipeline_reg) {
 
     // *** Constructor ***
     SC_HAS_PROCESS(pipeline_reg);
-	pipeline(sc_module_name smn) : sc_module { smn } {
+	pipeline_reg (sc_module_name smn) : sc_module { smn } {
         cout << ">> Pipeline Register" << endl;
         SC_METHOD(operate);
         sensitive << clock.pos();

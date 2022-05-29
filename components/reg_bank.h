@@ -2,6 +2,7 @@
 #define REG_BANK
 
 #include "systemc.h"
+using namespace std;
 
 SC_MODULE(reg_bank){
     // *** Signals ***
@@ -10,8 +11,8 @@ SC_MODULE(reg_bank){
     sc_in<bool> wr;
 
     sc_in<sc_uint<9>> rs, rt, rd;
-    sc_out<32> op_1, op_2;   
-    sc_in<32> write_reg;
+    sc_out<sc_int<32>> op_1, op_2;   
+    sc_in<sc_int<32>> write_reg;
 
     // *** Methods ***
     void operate() {
@@ -33,11 +34,11 @@ SC_MODULE(reg_bank){
         SC_METHOD(operate);
         sensitive << clock.pos();
 
-        bank = new sc_signal<32>[512];
+        bank = new sc_signal<sc_int<32>>[512];
     }
 
     private: 
-        sc_signal<32> *bank; 
+        sc_signal<sc_int<32>> *bank; 
 };
 
 #endif

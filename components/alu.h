@@ -2,6 +2,7 @@
 #define ALU
 
 #include "systemc.h"
+using namespace std;
 
 SC_MODULE(alu){
     // *** Signals ***

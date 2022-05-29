@@ -1,8 +1,9 @@
 #include "systemc.h"
+using namespace std;
 
 SC_MODULE(mux_write){
     // *** Signals ***
-    sc_in<2> selector;
+    sc_in<sc_uint<2>> selector;
     sc_in<sc_uint<9>> rs;
     sc_in<sc_uint<9>> rd;
     sc_out<sc_uint<9>> write_mem;

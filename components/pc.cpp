@@ -1,4 +1,5 @@
 #include "systemc.h"
+using namespace std;
 
 SC_MODULE(pc){
     // *** Signals ***
