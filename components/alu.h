@@ -82,6 +82,6 @@ SC_MODULE(alu){
         SC_METHOD(operate);
         sensitive << rs << rt << alu_op << reset_z_n;
     }
-}
+};
 
 #endif

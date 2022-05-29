@@ -46,6 +46,6 @@ SC_MODULE(data_memory){
 
     private: 
         sc_signal<32> *mem_data; 
-}
+};
 
 #endif

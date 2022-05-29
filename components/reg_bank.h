@@ -38,6 +38,6 @@ SC_MODULE(reg_bank){
 
     private: 
         sc_signal<32> *bank; 
-}
+};
 
 #endif
