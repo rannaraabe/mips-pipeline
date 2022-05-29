@@ -1,0 +1,14 @@
+AND 9 
+OR  9
+XOR 9
+NOT 9
+CMP 9
+ADD 9
+SUB 9
+LD  9
+ST  9
+J   11
+JN  11
+JZ  11
+LRI 9
+.

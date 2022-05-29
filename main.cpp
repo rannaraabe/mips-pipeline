@@ -1,6 +1,8 @@
 #include "systemc.h"
 #include "processor.cpp"
 #include <bits/stdc++.h>
+#include <unistd.h>
+
 using namespace std;
 
 int sc_main(int argn, char* argc[]) {

@@ -1,5 +1,6 @@
 #include "systemc.h"
 #include <bits/stdc++.h>
+#include <unistd.h>
 
 #include "./components/alu.h"
 #include "./components/control.cpp"
@@ -15,9 +16,9 @@
 
 using namespace std;
 
-sc_uint<64> instStringToInt(const string & inst);
+sc_int<64> instStringToInt(const string & inst);
 
-sc_uint<64> instStringToInt(const string & inst) {
+sc_int<64> instStringToInt(const string & inst) {
 	map<std::string, int> m = {
 		{"AND",1},
 		{"OR", 2},
@@ -32,7 +33,7 @@ sc_uint<64> instStringToInt(const string & inst) {
 		{"JN", 11},
 		{"JZ", 12},
 		{"LRI",13}};
-	sc_uint<64> instInt = 0;
+	sc_int<64> instInt = 0;
 	stringstream ss (inst);
 	string opcode;
 	int of1, of2, od;
@@ -56,7 +57,7 @@ sc_uint<64> instStringToInt(const string & inst) {
 };
 
 SC_MODULE(processor) {
-    vector<sc_uint<32>> instructions;
+    vector<sc_int<32>> instructions;
 
     /*** Initializing Components ***/
     control CONTROL{"CONTROL"};
@@ -90,8 +91,8 @@ SC_MODULE(processor) {
     // Instruction register
     sc_signal<bool> enable_ir_sig;
     sc_signal<bool> wr_ir_sig;
-    sc_signal<sc_uint<9>> immed_rd_sig;
-	sc_signal<sc_uint<9>> immed_r_sig;
+    sc_signal<sc_int<9>> immed_rd_sig;
+	sc_signal<sc_int<9>> immed_r_sig;
     // Registes bank
     sc_signal<bool> enable_reg_bank_sig;
     sc_signal<bool> wr_reg_bank_sig;
@@ -102,39 +103,39 @@ SC_MODULE(processor) {
     // ALU
     sc_signal<bool> reset_z_n_sig;
     // Multiplexers
-    sc_signal<sc_uint<2>> mux_read_sig;
-    sc_signal<sc_uint<2>> mux_write_sig;
+    sc_signal<sc_int<2>> mux_read_sig;
+    sc_signal<sc_int<2>> mux_write_sig;
     
     /*** Other signals ***/
-    sc_signal<sc_uint<5>> op_sig;	    // Opcode
-	sc_signal<sc_uint<9>> rs_sig;		// Primeiro operando
-	sc_signal<sc_uint<9>> rt_sig;		// Segundo operando
-	sc_signal<sc_uint<9>> rd_sig;		// Operando destino
+    sc_signal<sc_int<5>> op_sig;	    // Opcode
+	sc_signal<sc_int<9>> rs_sig;		// Primeiro operando
+	sc_signal<sc_int<9>> rt_sig;		// Segundo operando
+	sc_signal<sc_int<9>> rd_sig;		// Operando destino
 	
-    sc_signal<sc_uint<5>> op_sig_pipe;	// Opcode
-	sc_signal<sc_uint<9>> rs_sig_pipe;	// Primeiro operando
-	sc_signal<sc_uint<9>> rt_sig_pipe;	// Segundo operando
-	sc_signal<sc_uint<9>> rd_sig_pipe;	// Operando destino
+    sc_signal<sc_int<5>> op_sig_pipe;	// Opcode
+	sc_signal<sc_int<9>> rs_sig_pipe;	// Primeiro operando
+	sc_signal<sc_int<9>> rt_sig_pipe;	// Segundo operando
+	sc_signal<sc_int<9>> rd_sig_pipe;	// Operando destino
 	
     sc_signal<bool> zero_sig;
     sc_signal<bool> neg_sig;
 
-	sc_signal<sc_uint<9>> pc_out_sig;
-	sc_signal<sc_uint<32>> inst_sig;
+	sc_signal<sc_int<9>> pc_out_sig;
+	sc_signal<sc_int<32>> inst_sig;
 
     sc_signal<sc_int<32>> inst_ir_sig;
 
-	sc_signal<sc_uint<9>> rs_dm_sig;
+	sc_signal<sc_int<9>> rs_dm_sig;
 	sc_signal<sc_int<32>> mem_out_sig;
 
-	sc_signal<sc_uint<9>> next_inst_sig;
+	sc_signal<sc_int<9>> next_inst_sig;
 
-	sc_signal<sc_uint<32>> alu_out_sig;
-	sc_signal<sc_uint<32>> rs_alu_sig;
-	sc_signal<sc_uint<32>> rt_alu_sig;
+	sc_signal<sc_int<32>> alu_out_sig;
+	sc_signal<sc_int<32>> rs_alu_sig;
+	sc_signal<sc_int<32>> rt_alu_sig;
 
 	sc_signal<sc_int<32>> write_reg_sig;
-	sc_signal<sc_uint<9>> write_mem_sig;
+	sc_signal<sc_int<9>> write_mem_sig;
 
     /*** Constructor ***/
     processor(sc_module_name smn, const char * instructionsPath) : sc_module{smn} {
@@ -291,7 +292,7 @@ SC_MODULE(processor) {
 			sleep(1);
 
 			while(getline(ifStream, inst)) {
-				size_t found = inst.find("#");
+				size_t found = inst.find(".");
 
 				if(found != string::npos && found != 0){
 					instructions.push_back(instStringToInt(inst.substr(0, found)));

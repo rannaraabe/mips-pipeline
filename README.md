@@ -20,7 +20,6 @@ Constantes que serão utilizadas:
 
 ## To compile
 
-g++ -I. -I$SYSTEMC_HOME/include -L. -L$SYSTEMC_HOME/lib-linux64 main.cpp -o main -lsystemc -lm -std=c++11
-
+g++ -std=c++14 -I. -I$SYSTEMC_HOME/include -L. -L$SYSTEMC_HOME/lib-linux64 -Wl,-rpath=$SYSTEMC_HOME/lib-linux64 -o main main.cpp -lsystemc -lm
 
 Desenvolvido por @camiladuartes_ e @rannaraabe, 2022.
