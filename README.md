@@ -18,8 +18,10 @@ Constantes que serão utilizadas:
  - MEM_SIZE 512: 	 Quantidade de blocos de memoria (2^(WORD_ADDRESSING_SIZE))
 
 
-## To compile
+## To compile and execute
 
 g++ -std=c++14 -I. -I$SYSTEMC_HOME/include -L. -L$SYSTEMC_HOME/lib-linux64 -Wl,-rpath=$SYSTEMC_HOME/lib-linux64 -o main main.cpp -lsystemc -lm
+
+./main < file.txt
 
 Desenvolvido por @camiladuartes_ e @rannaraabe, 2022.
