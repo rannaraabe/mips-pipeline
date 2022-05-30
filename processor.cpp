@@ -16,54 +16,25 @@
 
 using namespace std;
 
-sc_int<64> instStringToInt(const string & inst, reg_bank REG_BANK_) {
-	map<std::string, int> m = {
-		{"AND",1},
-		{"OR", 2},
-		{"XOR",3},
-		{"NOT",4},
-		{"CMP",5},
-		{"ADD",6},
-		{"SUB",7},
-		{"LD", 8},
-		{"ST", 9},
-		{"J",  10},
-		{"JN", 11},
-		{"JZ", 12},
-		{"Memset",13}};
-	sc_int<64> instInt = 0;
-	stringstream ss (inst);
-	string op;
-	int rs, rt, rd;
-
-    // FIXME:
-    // rd.write(decode_inst.range(8,0));
-    // rt.write(decode_inst.range(17,9));
-    // rs.write(decode_inst.range(18,26));
-    // op.write(decode_inst.range(27,31));
-
-	ss >> op >> rd;
-	instInt += rd * 1e6;
-	instInt += m[op] * ((long long int) 1e9);
-	if (op == "J" || op == "JN" || op == "JZ")
-		return instInt;
-        
-	ss >> rs;
-	instInt += rs * 1e3;
-	if (op == "ST" || op == "LD")
-		return instInt;
-
-    if(op == "Memset") {
-        // TODO: Banco[x] = y
-        REG_BANK_.add(rs, rd);
-        return -1;
-    }
-        
-	ss >> rt;
-	instInt += rt;
-
-	return instInt;
+map<std::string, int> op_map = {
+    {"AND",1},
+    {"OR", 2},
+    {"XOR",3},
+    {"NOT",4},
+    {"CMP",5},
+    {"ADD",6},
+    {"SUB",7},
+    {"LD", 8},
+    {"ST", 9},
+    {"J",  10},
+    {"JN", 11},
+    {"JZ", 12},
 };
+
+int txtToInst(string op, int rs, int rt, int rd){
+    int op = op_map[op];
+    return op + (rs<<5) + (rt<<14) + (rd<<23);
+}
 
 SC_MODULE(processor) {
     vector<sc_int<32>> instructions;
@@ -295,37 +266,43 @@ SC_MODULE(processor) {
 
         cout << "\t=============================" << endl;
         cout << "\n** Trying to find instructions... **\n";
+	    sleep(1);
+        string inst;
+		int size = 0;
+		while(getline (cin, inst)){
+            stringstream ss(inst); 
+            string op;
+            ss >> operation;
 
-        if (ifStream.is_open()) {
-			cout << " >> Instructions found! Processing them..." << endl;
-			sleep(1);
+            vector<int> rs_rt_rd;
+            int data;
+            while(ss >> data){
+                rs_rt_rd.push_back(data);
+            }
 
-			while(getline(ifStream, inst)) {
-				size_t found = inst.find(".");
+            while(rs_rt_rd.size() < 3){
+                rs_rt_rd.push_back(0);
+            }
 
-				if(found != string::npos && found != 0){
-                    sc_int<32> intInst = instStringToInt(inst.substr(0, found));
-                    // If it's not Memset
-                    if(intInst != -1) instructions.push_back(intInst);
-					size++;
-				} else if(found == string::npos){
-					instructions.push_back(instStringToInt(inst));
-					size++;
-				}
-			}
+            if(op != "Memset"){
+                sc_int<32> instruction = txtToInst(op, rs_rt_rd[0], rs_rt_rd[1], rs_rt_rd[2]);
+                instructions.push_back(instruction);
+            }
+            else{
+                int pos = rs_rt_rd[0];
+                sc_int<32> data = rs_rt_rd[1];
+                DATA_MEMORY_.update_memory_at_pos(data, pos);
+            }
+            
+        }
 
-			cout << "> Loading into instruction memory..." << endl;
-			sleep(1);
-
-			INST_MEMORY.update_memory(instructions);
-			cout << "\t> Done! Instructions to be processed: <" << endl;
-			for (int i = 0; i < instructions.size(); ++i) {
-				cout << instructions[i] << endl;
-			}
-		} else {
-			cout << ">> Error! Could not find the file with the instructions..." << endl;
-		}
-
+        cout << "> Loading instructions into instruction memory..." << endl;
+		sleep(1);
+        INST_MEMORY.update_memory(instructions);
+        cout << "\t> Done! Instructions to be processed: <" << endl;
+        for (int i = 0; i < instructions.size(); ++i) {
+            cout << instructions[i] << endl;
+        }
         cout << "\t=============================" << endl;
         sleep(1);
     }

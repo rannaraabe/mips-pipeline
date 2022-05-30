@@ -1,10 +1,10 @@
-LRI 3 1
-LRI 6 0
-LRI 7 1
-LRI 1 0
-LRI 2 1
-LRI 4 1
-LRI 5 10
+Memset 3 1
+Memset 6 0
+Memset 7 1
+Memset 1 0
+Memset 2 1
+Memset 4 1
+Memset 5 10
 SUB 5 5 7
 CMP 9 5 4
 JN 15
@@ -14,4 +14,3 @@ ADD 2 6 3
 ADD 4 7 4
 J8
 ST 1 3
-.

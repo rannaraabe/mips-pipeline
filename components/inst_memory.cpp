@@ -25,9 +25,9 @@ SC_MODULE(inst_memory){
         }
     }
 
-    void update_memory(const vector<sc_int<32>> &d){
-        for(int i=0; i<d.size(); i++){
-            mem_data[i] = d[i];
+    void update_memory(const vector<sc_int<32>> &inst){
+        for(int i = 0; i < inst.size(); i++){
+            mem_data[i] = inst[i];
         }
     }
 
