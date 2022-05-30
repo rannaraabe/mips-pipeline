@@ -24,7 +24,10 @@ SC_MODULE(reg_bank){
                 op_2.write(bank[rt.read()]);
             }
         }
+    }
 
+    void add(sc_in<sc_int<9>> &value, sc_in<sc_int<32> address){
+        bank[address.read()] = value.read();
     }
 
     // *** Constructor ***

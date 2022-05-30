@@ -28,10 +28,6 @@ SC_MODULE(alu){
         opcode = alu_op.read();
 
         switch(opcode) {
-            case 0:
-                // NOT
-                result = ~op_1;
-                break;
             case 1:
                 // AND
                 result = op_1 & op_2;
@@ -45,14 +41,10 @@ SC_MODULE(alu){
                 result = op_1 ^ op_2;
                 break;
             case 4:
-                // ADD
-                result = op_1 + op_2;
-                break;
+                // NOT
+                result = ~op_1;
+                break;               
             case 5:
-                // SUB
-                result = op_1 - op_2;
-                break;
-            case 6:
                 // CMP
                 if(op_1 == op_2) {
                     result = 1;
@@ -69,6 +61,13 @@ SC_MODULE(alu){
                     zero = false;
                     neg = false;
                 }
+            case 6:
+                // ADD
+                result = op_1 + op_2;
+                break;
+            case 7:
+                // SUB
+                result = op_1 - op_2;
                 break;
             default:
 			    result = 0;

@@ -16,9 +16,7 @@
 
 using namespace std;
 
-sc_int<64> instStringToInt(const string & inst);
-
-sc_int<64> instStringToInt(const string & inst) {
+sc_int<64> instStringToInt(const string & inst, reg_bank REG_BANK_) {
 	map<std::string, int> m = {
 		{"AND",1},
 		{"OR", 2},
@@ -32,26 +30,37 @@ sc_int<64> instStringToInt(const string & inst) {
 		{"J",  10},
 		{"JN", 11},
 		{"JZ", 12},
-		{"LRI",13}};
+		{"Memset",13}};
 	sc_int<64> instInt = 0;
 	stringstream ss (inst);
-	string opcode;
-	int of1, of2, od;
+	string op;
+	int rs, rt, rd;
 
     // FIXME:
-	ss >> opcode >> od;
-	instInt += od * 1e6;
-	instInt += m[opcode] * ((long long int) 1e9);
-	if (opcode == "J" || opcode == "JN" || opcode == "JZ")
+    // rd.write(decode_inst.range(8,0));
+    // rt.write(decode_inst.range(17,9));
+    // rs.write(decode_inst.range(18,26));
+    // op.write(decode_inst.range(27,31));
+
+	ss >> op >> rd;
+	instInt += rd * 1e6;
+	instInt += m[op] * ((long long int) 1e9);
+	if (op == "J" || op == "JN" || op == "JZ")
 		return instInt;
         
-	ss >> of1;
-	instInt += of1 * 1e3;
-	if (opcode == "ST" || opcode == "LD" || opcode == "LRI")
+	ss >> rs;
+	instInt += rs * 1e3;
+	if (op == "ST" || op == "LD")
 		return instInt;
+
+    if(op == "Memset") {
+        // TODO: Banco[x] = y
+        REG_BANK_.add(rs, rd);
+        return -1;
+    }
         
-	ss >> of2;
-	instInt += of2;
+	ss >> rt;
+	instInt += rt;
 
 	return instInt;
 };
@@ -59,7 +68,7 @@ sc_int<64> instStringToInt(const string & inst) {
 SC_MODULE(processor) {
     vector<sc_int<32>> instructions;
 
-    /*** Initializing Components ***/
+    /* Initializing Components */
     control CONTROL{"CONTROL"};
     pc PC{"PC"};
     inst_memory INST_MEMORY{"INST_MEMORY"};
@@ -72,10 +81,10 @@ SC_MODULE(processor) {
     mux_read MUX_READ{"MUX_READ"};
     mux_write MUX_WRITE{"MUX_WRITE"};
 
-    /*** Initializing signals ***/
+    /* Initializing signals */
     sc_in<bool> clock;
 
-    /*** Control signals ***/
+    /* Control signals */
     // PC
     sc_signal<bool> enable_pc_sig;
     sc_signal<bool> load_pc_sig;
@@ -106,7 +115,7 @@ SC_MODULE(processor) {
     sc_signal<sc_int<2>> mux_read_sig;
     sc_signal<sc_int<2>> mux_write_sig;
     
-    /*** Other signals ***/
+    /* Other signals */
     sc_signal<sc_int<5>> op_sig;	    // Opcode
 	sc_signal<sc_int<9>> rs_sig;		// Primeiro operando
 	sc_signal<sc_int<9>> rt_sig;		// Segundo operando
@@ -137,13 +146,13 @@ SC_MODULE(processor) {
 	sc_signal<sc_int<32>> write_reg_sig;
 	sc_signal<sc_int<9>> write_mem_sig;
 
-    /*** Constructor ***/
+    /* Constructor */
     processor(sc_module_name smn, const char * instructionsPath) : sc_module{smn} {
         sleep(1);
         cout << "\n>> MIPS_PIPE Processor ir ready! <<" << endl;
         sleep(1);
 
-        /*** Connecting ***/
+        /* Connecting */
         // Control
         CONTROL.clock(clock);
         CONTROL.neg(neg_sig);
@@ -181,7 +190,7 @@ SC_MODULE(processor) {
         CONTROL.enable_data_mem(enable_data_mem_sig);
         CONTROL.wr_data_mem(wr_data_mem_sig);
 
-        /*** Instruction Memory ***/
+        /* Instruction Memory */
         INST_MEMORY.clock(clock);
         INST_MEMORY.enable(enable_instr_memory_sig);
         INST_MEMORY.wr(wr_instr_memory_sig);
@@ -190,7 +199,7 @@ SC_MODULE(processor) {
         
         INST_MEMORY.inst(inst_ir_sig); // FIXME: inst_ir_sig
 
-        /*** Instruction register ***/
+        /* Instruction register */
         INST_REGISTER.clock(clock);
         INST_REGISTER.enable(enable_ir_sig);
         INST_REGISTER.wr(wr_ir_sig);
@@ -198,7 +207,7 @@ SC_MODULE(processor) {
         
         INST_REGISTER.inst_out(inst_sig); // FIXME:
 
-        /*** Data Memory ***/
+        /* Data Memory */
         DATA_MEMORY_.clock(clock);
         DATA_MEMORY_.enable(enable_data_mem_sig);
         DATA_MEMORY_.wr(wr_data_mem_sig);
@@ -207,7 +216,7 @@ SC_MODULE(processor) {
         
         DATA_MEMORY_.mem_out(mem_out_sig);
 
-        /*** Decoder ***/
+        /* Decoder */
         DECODER.inst(inst_sig);
         
         DECODER.op(op_sig);
@@ -215,7 +224,7 @@ SC_MODULE(processor) {
         DECODER.rt(rt_sig);
         DECODER.rd(rd_sig);
 
-        /*** PC ***/
+        /* PC */
         PC.clock(clock);
         PC.enable(enable_pc_sig);
         PC.load(load_pc_sig);
@@ -224,7 +233,7 @@ SC_MODULE(processor) {
         
         PC.pc_out(pc_out_sig);
 
-        /*** Pipeline register ***/
+        /* Pipeline register */
         PIPELINE_REG.clock(clock);
         PIPELINE_REG.enable(enable_pipeline_sig);
         PIPELINE_REG.wr(wr_pipeline_sig);
@@ -238,7 +247,7 @@ SC_MODULE(processor) {
         PIPELINE_REG.rt_out(rt_sig_pipe);
         PIPELINE_REG.rd_out(rd_sig_pipe);	
 
-        /*** ALU ***/
+        /* ALU */
         ALU_.rs(rs_alu_sig);
         ALU_.rt(rt_alu_sig);
         ALU_.alu_op(op_sig_pipe);
@@ -248,7 +257,7 @@ SC_MODULE(processor) {
         ALU_.zero(zero_sig);
         ALU_.neg(neg_sig);
 
-        /*** Register bank ***/
+        /* Register bank */
         REG_BANK_.clock(clock);
         REG_BANK_.enable(enable_reg_bank_sig);
         REG_BANK_.wr(wr_reg_bank_sig);
@@ -260,7 +269,7 @@ SC_MODULE(processor) {
         REG_BANK_.op_1(rs_alu_sig);
         REG_BANK_.op_2(rt_alu_sig);
 
-        /*** Mux (write_reg) ***/
+        /* Mux (write_reg) */
         MUX_READ.selector(mux_read_sig); // era: write_reg_sig
         MUX_READ.mem_out(mem_out_sig);
         MUX_READ.alu_out(alu_out_sig);
@@ -268,24 +277,24 @@ SC_MODULE(processor) {
 
         MUX_READ.write_reg(write_reg_sig);
 
-        /*** Mux (write_mem) ***/
+        /* Mux (write_mem) */
         MUX_WRITE.selector(mux_write_sig); // era: write_mem_sig
         MUX_WRITE.rs(rs_sig_pipe);
         MUX_WRITE.rd(rd_sig_pipe);
         
         MUX_WRITE.write_mem(write_mem_sig);
 
-        /*** Sensitivity List ***/
+        /* Sensitivity List */
         sensitive << clock.pos();
 
-        /*** Reading instructions from file ***/
+        /* Reading instructions from file */
         ifstream ifStream;
 		string inst;
 		int size = 0;
 		ifStream.open(instructionsPath, ifstream::in);
 
         cout << "\t=============================" << endl;
-        cout << "\n*** Trying to find instructions... ***\n";
+        cout << "\n** Trying to find instructions... **\n";
 
         if (ifStream.is_open()) {
 			cout << " >> Instructions found! Processing them..." << endl;
@@ -295,7 +304,9 @@ SC_MODULE(processor) {
 				size_t found = inst.find(".");
 
 				if(found != string::npos && found != 0){
-					instructions.push_back(instStringToInt(inst.substr(0, found)));
+                    sc_int<32> intInst = instStringToInt(inst.substr(0, found));
+                    // If it's not Memset
+                    if(intInst != -1) instructions.push_back(intInst);
 					size++;
 				} else if(found == string::npos){
 					instructions.push_back(instStringToInt(inst));
